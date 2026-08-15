@@ -37,6 +37,7 @@ dependencies:
   fpdart: ^1.2.0
   supabase_flutter: ^2.17.1
   flutter_dotenv: ^6.0.1
+  flutter_bloc: ^9.1.1
 
 dev_dependencies:
   flutter_test:
