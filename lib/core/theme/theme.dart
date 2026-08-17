@@ -14,5 +14,9 @@ class AppTheme {
       focusedBorder: _border(AppPallete.gradient2),
     ),
     appBarTheme: const AppBarTheme(backgroundColor: AppPallete.backgroundColor),
+    chipTheme: ChipThemeData(
+      color: WidgetStatePropertyAll(AppPallete.backgroundColor),
+      side: BorderSide.none,
+    ),
   );
 }
