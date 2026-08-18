@@ -9,9 +9,11 @@ class AppTheme {
   static final darkThemeMode = ThemeData.dark().copyWith(
     scaffoldBackgroundColor: AppPallete.backgroundColor,
     inputDecorationTheme: InputDecorationTheme(
+      border: _border(),
       contentPadding: const EdgeInsets.all(27),
       enabledBorder: _border(),
       focusedBorder: _border(AppPallete.gradient2),
+      errorBorder: _border(AppPallete.errorColor),
     ),
     appBarTheme: const AppBarTheme(backgroundColor: AppPallete.backgroundColor),
     chipTheme: ChipThemeData(
