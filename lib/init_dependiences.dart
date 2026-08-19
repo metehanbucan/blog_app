@@ -1,4 +1,5 @@
 import 'package:blog_app/core/common/cubits/app_user/app_user_cubit.dart';
+import 'package:blog_app/core/network/connection_checker.dart';
 import 'package:blog_app/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:blog_app/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:blog_app/features/auth/domain/usecases/current_user.dart';
@@ -13,6 +14,7 @@ import 'package:blog_app/features/blog/domain/usecases/upload_blog.dart';
 import 'package:blog_app/features/blog/presentation/bloc/blog_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 final serviceLocator = GetIt.instance;
@@ -27,7 +29,13 @@ Future<void> initDependencies() async {
   );
   serviceLocator.registerLazySingleton(() => supabase.client);
 
+  serviceLocator.registerFactory(() => InternetConnection());
+
   serviceLocator.registerLazySingleton(() => AppUserCubit());
+
+  serviceLocator.registerFactory<ConnectionChecker>(
+    () => ConnectionCheckerImpl(serviceLocator()),
+  );
 }
 
 void _initAuth() {
@@ -36,7 +44,10 @@ void _initAuth() {
       () => AuthRemoteDataSoruceImpl(serviceLocator<SupabaseClient>()),
     )
     ..registerFactory(
-      () => AuthRepositoryImpl(serviceLocator<AuthRemoteDataSoruceImpl>()),
+      () => AuthRepositoryImpl(
+        serviceLocator<AuthRemoteDataSoruceImpl>(),
+        serviceLocator(),
+      ),
     )
     ..registerFactory(() => UserSignUp(serviceLocator<AuthRepositoryImpl>()))
     ..registerFactory(() => UserLogin(serviceLocator<AuthRepositoryImpl>()))
